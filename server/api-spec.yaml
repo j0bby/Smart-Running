@@ -20,6 +20,7 @@ tags:
     description: Operations on user accounts
 
 paths:
+# routes
   /route:
     post:
       tags:
@@ -114,8 +115,8 @@ paths:
     put:
       tags:
       - route
-      summary: Edit an existing route.
-      operationId: editRouteByID
+      summary: Update an existing route.
+      operationId: updateRouteByID
       parameters:
         - in: path
           name: routeID
@@ -131,7 +132,141 @@ paths:
             $ref: '#/definitions/Route'
       responses:
         204:
-          description: Route edited
+          description: Route updated
+
+        400:
+          description: Invalid input
+
+        404:
+          description: Invalid ID
+
+  /route/{routeID}/rate:
+    post:
+      tags:
+        - route
+      summary: Rate a route.
+      operationId: rateRouteByID
+      parameters:
+        - in: path
+          name: routeID
+          description: The ID of the route to rate.
+          type: number
+          format: int32
+          required: true
+        - in: query
+          name: rating
+          description: The rating.
+          type: number
+          format: int32
+          minimum: 1
+          maximum: 5
+          required: true
+      responses:
+        204:
+          description: Rating accepted
+
+        400:
+          description: Invalid input
+
+        404:
+          description: Invalid ID
+
+# markers
+  /marker:
+    post:
+      tags:
+      - marker
+      summary: Add a new marker.
+      operationId: addMarker
+      parameters:
+        - in: body
+          name: marker
+          description: The new marker
+          required: true
+          schema:
+            $ref: '#/definitions/Marker'
+      responses:
+        201:
+          description: Marker created
+          headers:
+            Location:
+              description: Where to find the newly created marker.
+              type: string
+
+        400:
+          description: Invalid input
+
+        409:
+          description: Marker already exists
+
+  /marker/{markerID}:
+    get:
+      tags:
+        - marker
+      summary: Get a specific marker.
+      operationId: getMarkerByID
+      parameters:
+        - in: path
+          name: markerID
+          description: The ID of the marker to get.
+          type: number
+          format: int32
+          required: true
+      responses:
+        200:
+          description: The requested marker.
+          schema:
+            $ref: '#/definitions/Marker'
+
+        400:
+          description: Invalid input
+
+        404:
+          description: Invalid ID
+
+    delete:
+      tags:
+      - marker
+      summary: Delete a marker.
+      operationId: deleteMarkerByID
+      parameters:
+        - in: path
+          name: markerID
+          description: The ID of the marker to delete.
+          type: number
+          format: int32
+          required: true
+      responses:
+        204:
+          description: Marker deleted
+
+        400:
+          description: Invalid input
+
+        404:
+          description: Invalid ID
+
+    put:
+      tags:
+      - marker
+      summary: Update an existing marker.
+      operationId: updateMarkerByID
+      parameters:
+        - in: path
+          name: markerID
+          description: The ID of the marker to update.
+          type: number
+          format: int32
+          required: true
+        - in: body
+          name: marker
+          description: The updated marker.
+          required: true
+          schema:
+            $ref: '#/definitions/Marker'
+      responses:
+        204:
+          description: Marker updated
 
         400:
           description: Invalid input
