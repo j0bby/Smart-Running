@@ -1,0 +1,4 @@
+django==1.11
+djangorestframework
+django-choices
+django-rest-swagger
