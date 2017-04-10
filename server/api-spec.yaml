@@ -12,12 +12,12 @@ produces:
 
 tags:
   # TODO workouts
-- name: route
-  description: Operations on routes
-- name: marker
-  description: Operations on route markers
-- name: user
-  description: Operationrs on user accounts
+  - name: route
+    description: Operations on routes
+  - name: marker
+    description: Operations on route markers
+  - name: user
+    description: Operations on user accounts
 
 paths:
   /route:
@@ -27,12 +27,12 @@ paths:
       summary: Add a new route.
       operationId: addRoute
       parameters:
-      - in: body
-        name: route
-        description: The new route
-        required: true
-        schema:
-          $ref: '#/definitions/Route'
+        - in: body
+          name: route
+          description: The new route
+          required: true
+          schema:
+            $ref: '#/definitions/Route'
       responses:
         201:
           description: Route created
@@ -41,11 +41,92 @@ paths:
               description: Where to find the newly created route.
               type: string
 
-        405:
+        400:
           description: Invalid input
 
         409:
           description: Route already exists
+
+    delete:
+      tags:
+      - route
+      summary: Delete a route.
+      operationId: deleteRoute
+      parameters:
+        - in: query
+          name: id
+          description: The ID of the route to delete.
+          type: number
+          format: int32
+          required: true
+      responses:
+        204:
+          description: Route deleted
+
+        400:
+          description: Invalid input
+
+        404:
+          description: Invalid ID
+
+    put:
+      tags:
+      - route
+      summary: Edit an existing route.
+      operationId: editRoute
+      parameters:
+        - in: query
+          name: id
+          description: The ID of the route to update.
+          type: number
+          format: int32
+          required: true
+        - in: body
+          name: route
+          description: The updated route.
+          required: true
+          schema:
+            $ref: '#/definitions/Route'
+      responses:
+        204:
+          description: Route edited
+
+        400:
+          description: Invalid input
+
+        404:
+          description: Invalid ID
+
+    get:
+      tags:
+        - route
+      summary: |
+        Get a specific route, or all if no ID
+        is specified.
+      operationId: getRoute
+      parameters:
+        - in: query
+          name: id
+          type: number
+          format: int32
+          required: false
+      responses:
+        200:
+          description: |
+            An array with the route with the given ID as
+            the only element if ID is given and valid,
+            otherwise all routes.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Route'
+
+        400:
+          description: Invalid input
+
+        404:
+          description: Invalid ID
+
 
 definitions:
   ID:
@@ -79,6 +160,11 @@ definitions:
         format: date-time
         description: When this route was published.
         readOnly: true
+      rating:
+        type: integer
+        minimum: 1
+        maximum: 5
+        readOnly: true
       title:
         type: string
       description:
@@ -95,6 +181,7 @@ definitions:
         type: integer
         minimum: 1
         maximum: 5
+
 
   ModeType:
     enum:
