@@ -47,14 +47,56 @@ paths:
         409:
           description: Route already exists
 
+    get:
+      tags:
+        - route
+      summary: Get all routes.
+      operationId: getRoutes
+      parameters: []
+      responses:
+        200:
+          description: An array containing all routes.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Route'
+
+        400:
+          description: Invalid input
+
+  /route/{routeID}:
+    get:
+      tags:
+        - route
+      summary: Get a specific route.
+      operationId: getRouteByID
+      parameters:
+        - in: path
+          name: routeID
+          description: The ID of the route to get.
+          type: number
+          format: int32
+          required: true
+      responses:
+        200:
+          description: The requested route.
+          schema:
+            $ref: '#/definitions/Route'
+
+        400:
+          description: Invalid input
+
+        404:
+          description: Invalid ID
+
     delete:
       tags:
       - route
       summary: Delete a route.
-      operationId: deleteRoute
+      operationId: deleteRouteByID
       parameters:
-        - in: query
-          name: id
+        - in: path
+          name: routeID
           description: The ID of the route to delete.
           type: number
           format: int32
@@ -73,10 +115,10 @@ paths:
       tags:
       - route
       summary: Edit an existing route.
-      operationId: editRoute
+      operationId: editRouteByID
       parameters:
-        - in: query
-          name: id
+        - in: path
+          name: routeID
           description: The ID of the route to update.
           type: number
           format: int32
@@ -90,36 +132,6 @@ paths:
       responses:
         204:
           description: Route edited
-
-        400:
-          description: Invalid input
-
-        404:
-          description: Invalid ID
-
-    get:
-      tags:
-        - route
-      summary: |
-        Get a specific route, or all if no ID
-        is specified.
-      operationId: getRoute
-      parameters:
-        - in: query
-          name: id
-          type: number
-          format: int32
-          required: false
-      responses:
-        200:
-          description: |
-            An array with the route with the given ID as
-            the only element if ID is given and valid,
-            otherwise all routes.
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Route'
 
         400:
           description: Invalid input
