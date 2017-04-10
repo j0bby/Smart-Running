@@ -40,6 +40,9 @@ class Route(models.Model):
 
     # markers list found in Marker model
 
+    def __str__(self):
+        return "%s: %s (%d markers)" % (self.title, self.description, len(self.markers))
+
 
 class Marker(models.Model):
     title = models.CharField(max_length=64)
@@ -51,4 +54,7 @@ class Marker(models.Model):
 
     zone_radius = models.FloatField()
 
-    routes = models.ManyToManyField(Route)
+    routes = models.ManyToManyField(Route, related_name='markers')
+
+    def __str__(self):
+        return "%s: %s" % (self.title, self.description)
