@@ -1,8 +1,9 @@
 import djchoices
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
+from server import settings
 
 
 class ModeType(djchoices.DjangoChoices):
@@ -23,7 +24,7 @@ class CustomUser(AbstractUser):
 
 
 class Route(models.Model):
-    publisher = models.ForeignKey(get_user_model())
+    publisher = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     date_published = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
