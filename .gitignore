@@ -1,3 +1,7 @@
+# Django
+secrets_keys.py
+db.sqlite3
+
 # Built application files
 *.apk
 *.ap_

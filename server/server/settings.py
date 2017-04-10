@@ -11,6 +11,25 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from secrets import randbelow
+
+def load_secrets(try_again=True):
+    try:
+        global SECRET_KEY
+        from secrets_keys import SECRET_KEY
+    except ImportError as e:
+        def generate_key():
+            max_char = ord("~")
+            min_char = ord(" ")
+            key = ''.join(chr(randbelow(max_char - min_char) + min_char) for _ in range(64))
+            return key.replace('"', '\\"')
+
+        # create new
+        with open("secrets_keys.py", "w") as f:
+            f.write(f'SECRET_KEY = "{generate_key()}"\n')
+            print("Generated new secret key")
+        if try_again:
+            load_secrets(False)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +39,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^sf_!18=oo0@e(^)l@7v6j=kxr0f(0boucj)6c6ciadbgwh%2c'
+load_secrets()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
