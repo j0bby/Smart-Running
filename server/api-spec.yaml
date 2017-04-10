@@ -1,0 +1,158 @@
+swagger: '2.0'
+info:
+  description: |
+    Smart Running API plan.
+  version: '1.0'
+  title: Smart Running
+host: smart.domwillia.ms
+consumes:
+  - application/json
+produces:
+  - application/json
+
+tags:
+  # TODO workouts
+- name: route
+  description: Operations on routes
+- name: marker
+  description: Operations on route markers
+- name: user
+  description: Operationrs on user accounts
+
+paths:
+  /route:
+    post:
+      tags:
+      - route
+      summary: Add a new route.
+      operationId: addRoute
+      parameters:
+      - in: body
+        name: route
+        description: The new route
+        required: true
+        schema:
+          $ref: '#/definitions/Route'
+      responses:
+        201:
+          description: Route created
+          headers:
+            Location:
+              description: Where to find the newly created route.
+              type: string
+
+        405:
+          description: Invalid input
+
+        409:
+          description: Route already exists
+
+definitions:
+  ID:
+    type: integer
+    format: int32
+    minimum: 0
+    readOnly: true
+
+  Location:
+    type: object
+    properties:
+      latitude:
+        type: number
+        format: double
+      longitude:
+        type: number
+        format: double
+
+  Route:
+    type: object
+    properties:
+      id:
+        $ref: '#/definitions/ID'
+      owner:
+        type: string
+        format: uuid
+        description: The UUID of the user who published this route.
+        readOnly: true
+      date:
+        type: string
+        format: date-time
+        description: When this route was published.
+        readOnly: true
+      title:
+        type: string
+      description:
+        type: string
+      markers:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/Marker'
+        minLength: 1
+      mode:
+        $ref: '#/definitions/ModeType'
+      difficulty:
+        type: integer
+        minimum: 1
+        maximum: 5
+
+  ModeType:
+    enum:
+      - Touristic
+      - Sporty
+
+  ProfileType:
+    enum:
+      - Touristic
+      - Sporty
+      - Both
+
+  Marker:
+    type: object
+    properties:
+      id:
+        $ref: '#/definitions/ID'
+      title:
+        type: string
+      description:
+        type: string
+      fullDescription:
+        type: string
+        description: |
+          Full information on the site, which could
+          include HTML, images, videos etc.
+      location:
+        $ref: '#/definitions/Location'
+      zoneRadius:
+        type: number
+        format: double
+        description: |
+          Distance from this point that a point must
+          be situated to be considered inside.
+        minimum: 0
+
+  User:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        readOnly: true
+      emailVerified:
+        type: boolean
+        readOnly: true
+      firstName:
+        type: string
+      surname:
+        type: string
+      birthDate:
+        type: string
+        format: date
+      profile:
+        $ref: '#/definitions/ProfileType'
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+        format: password
