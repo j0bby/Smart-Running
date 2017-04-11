@@ -2,3 +2,6 @@ django==1.8
 djangorestframework
 django-choices
 django-rest-swagger
+django-rest-auth
+django-allauth
+django-crispy-forms

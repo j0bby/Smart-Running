@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from rest_auth.app_settings import UserDetailsSerializer
 from rest_framework import serializers
 
 from smart_running.models import Route, Marker, UserProfile
@@ -13,17 +14,24 @@ class RouteSerializer(serializers.HyperlinkedModelSerializer):
         # TODO set read only fields on create()
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'first_name', 'last_name', 'email', 'password', 'profile')
-        # TODO password write only
+class UserSerializer(UserDetailsSerializer):
+    email_verified = serializers.BooleanField(source="userprofile.email_verified")
 
+    class Meta(UserDetailsSerializer.Meta):
+        fields = UserDetailsSerializer.Meta.fields + ('email_verified',)
 
-class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = UserProfile
-        read_only_fields = ('email_verified',)
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('userprofile', {})
+        email_verified = profile_data.get('email_verified')
+
+        instance = super(UserSerializer, self).update(instance, validated_data)
+
+        # get and update user profile
+        profile = instance.userprofile
+        if profile_data and email_verified:
+            profile.email_verified = email_verified
+            profile.save()
+        return instance
 
 
 class MarkerSerializer(serializers.HyperlinkedModelSerializer):
