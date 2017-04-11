@@ -1,6 +1,7 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from smart_running.models import Route, CustomUser, Marker
+from smart_running.models import Route, Marker, UserProfile
 
 
 class RouteSerializer(serializers.HyperlinkedModelSerializer):
@@ -14,11 +15,15 @@ class RouteSerializer(serializers.HyperlinkedModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = CustomUser
-        fields = ('url', 'first_name', 'last_name', 'email', 'password', 'profile',
-                  'birth_date', 'email_verified')
-        read_only_fields = ('email_verified',)
+        model = User
+        fields = ('url', 'first_name', 'last_name', 'email', 'password', 'profile')
         # TODO password write only
+
+
+class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = UserProfile
+        read_only_fields = ('email_verified',)
 
 
 class MarkerSerializer(serializers.HyperlinkedModelSerializer):

@@ -1,9 +1,9 @@
 import djchoices
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-
-from server import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class ModeType(djchoices.DjangoChoices):
@@ -17,14 +17,8 @@ class ProfileType(djchoices.DjangoChoices):
     BOTH = djchoices.ChoiceItem()
 
 
-class CustomUser(AbstractUser):
-    profile = models.CharField(max_length=16, choices=ProfileType.choices)
-    birth_date = models.DateField()
-    email_verified = models.BooleanField(default=False)
-
-
 class Route(models.Model):
-    publisher = models.ForeignKey(settings.AUTH_USER_MODEL)
+    publisher = models.ForeignKey(User)
 
     date_published = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -58,3 +52,22 @@ class Marker(models.Model):
 
     def __str__(self):
         return "%s: %s" % (self.title, self.description)
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+
+    profile_type = models.CharField(max_length=16, choices=ProfileType.choices)
+    birth_date = models.DateField(null=True)
+    email_verified = models.BooleanField(default=False)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
