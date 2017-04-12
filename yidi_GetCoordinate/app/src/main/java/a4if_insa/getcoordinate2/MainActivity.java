@@ -21,12 +21,12 @@ import a4if_insa.getcoordinate2.R;
 
 public class MainActivity extends Activity {
 
-    private TextView positionText;// ��ž�γ�ȵ��ı�
-    private TextView tipInfo;// ��ʾ��Ϣ
+    private TextView positionText;// textview for latitude and for the longtitude
+    private TextView tipInfo;// message info
 
-    private LocationManager locationManager;// λ�ù�����
+    private LocationManager locationManager;//
 
-    private String provider;// λ���ṩ��
+    private String provider;// location provider
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -36,18 +36,18 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         positionText = (TextView) findViewById(R.id.position_text);
         tipInfo = (TextView) findViewById(R.id.tipInfo);
-        // ���LocationManager��ʵ��
+        // instanciate locaionManager
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        // ��ȡ���п��õ�λ���ṩ��
+        // get all available providers
         List<String> providerList = locationManager.getProviders(true);
         if (providerList.contains(LocationManager.GPS_PROVIDER)) {
-            //����ʹ��gps
+            // we appreciate here usage of GPS
             provider = LocationManager.GPS_PROVIDER;
         } else if (providerList.contains(LocationManager.NETWORK_PROVIDER)) {
             provider = LocationManager.NETWORK_PROVIDER;
         } else {
-            // û�п��õ�λ���ṩ��
+            // when there is no available location provider
             Toast.makeText(MainActivity.this, "there is no available location provider", Toast.LENGTH_LONG)
                     .show();
             return;
@@ -55,8 +55,8 @@ public class MainActivity extends Activity {
 
         Location location = locationManager.getLastKnownLocation(provider);
         if (location != null) {
-            // ��ʾ��ǰ�豸��λ����Ϣ
-            String firstInfo = "first information requested";
+            // print device's postion coordinate
+            String firstInfo = "first response of your request";
             showLocation(location, firstInfo);
         } else {
             String info = "Sorry, cannot obtain the actual position";
@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
             positionText.setText(info);
         }
 
-        // ���µ�ǰλ��
+        // renew the postion coordinate
         locationManager.requestLocationUpdates(provider, 10 * 1000, 1,locationListener);
 
     }
@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         if (locationManager != null) {
-            // �رճ���ʱ���������Ƴ�
+           // remove the listener when program's exiting
             locationManager.removeUpdates(locationListener);
         }
 
@@ -99,7 +99,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onLocationChanged(Location location) {
-            // �豸λ�÷����ı�ʱ��ִ������Ĵ���
+            // code run when device's postion changed
             String changeInfo = "refresh every 10 seconds\n" + sdf.format(new Date())
                     + ",\n longitude : " + location.getLongitude() + ",\n latitude : "
                     + location.getLatitude();
@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
     };
 
     /**
-     * ��ʾ��ǰ�豸��λ����Ϣ
+     *  print device's postion coordinate
      *
      * @param location
      */
