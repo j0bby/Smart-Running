@@ -12,18 +12,19 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from secrets import randbelow
+from random import SystemRandom
 
 
 def load_secrets(try_again=True):
     try:
         global SECRET_KEY
         from secrets_keys import SECRET_KEY
-    except ImportError as e:
+    except ImportError:
+        r = SystemRandom()
         def generate_key():
             max_char = ord("~")
             min_char = ord(" ")
-            key = ''.join(chr(randbelow(max_char - min_char) + min_char) for _ in range(64))
+            key = ''.join(chr(r.randint(min_char, max_char)) for _ in range(64))
             return key.replace('"', '\\"')
 
         # create new
