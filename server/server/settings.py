@@ -78,7 +78,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication'
     )
+}
 
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'smart_running.serializers.UserSerializer'
 }
 
 SWAGGER_SETTINGS = {

@@ -1,8 +1,7 @@
-from django.contrib.auth.models import User
-from rest_auth.app_settings import UserDetailsSerializer
+from rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 
-from smart_running.models import Route, Marker, UserProfile
+from smart_running.models import Route, Marker
 
 
 class RouteSerializer(serializers.HyperlinkedModelSerializer):
@@ -15,22 +14,34 @@ class RouteSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(UserDetailsSerializer):
+    profile_type = serializers.CharField(source="userprofile.profile_type")
+    birth_date = serializers.CharField(source="userprofile.birth_date")
     email_verified = serializers.BooleanField(source="userprofile.email_verified")
 
     class Meta(UserDetailsSerializer.Meta):
-        fields = UserDetailsSerializer.Meta.fields + ('email_verified',)
+        fields = UserDetailsSerializer.Meta.fields + \
+                 ('profile_type', 'birth_date', 'email_verified')
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('userprofile', {})
+
+        profile_type = profile_data.get('profile_type')
+        birth_date = profile_data.get('birth_date')
         email_verified = profile_data.get('email_verified')
 
         instance = super(UserSerializer, self).update(instance, validated_data)
 
-        # get and update user profile
         profile = instance.userprofile
-        if profile_data and email_verified:
-            profile.email_verified = email_verified
+        if profile_data:
+            if profile_type:
+                profile.profile_type = profile_type
+            if birth_date:
+                profile.birth_date = birth_date
+            if email_verified:
+                profile.email_verified = email_verified
+
             profile.save()
+
         return instance
 
 
