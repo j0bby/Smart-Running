@@ -28,7 +28,7 @@ def load_secrets(try_again=True):
 
         # create new
         with open("secrets_keys.py", "w") as f:
-            f.write(f'SECRET_KEY = "{generate_key()}"\n')
+            f.write('SECRET_KEY = "%s"\n' % generate_key())
             print("Generated new secret key")
         if try_again:
             load_secrets(False)
