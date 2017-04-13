@@ -25,6 +25,10 @@ class RouteViewSet(viewsets.ModelViewSet):
     serializer_class = RouteSerializer
     permission_classes = (AdminWriteAnonRead,)
 
+    def create(self, request, *args, **kwargs):
+        request.data['publisher_id'] = request.auth.user.id
+        return super(viewsets.ModelViewSet, self).create(request, *args, **kwargs)
+
 
 class MarkerViewSet(viewsets.ModelViewSet):
     queryset = Marker.objects.all()

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 
@@ -5,12 +6,33 @@ from smart_running.models import Route, Marker
 
 
 class RouteSerializer(serializers.HyperlinkedModelSerializer):
+    publisher = 'smart_running.serializers.UserSerializer'
+
     class Meta:
         model = Route
-        fields = ('url', 'publisher', 'date_published', 'last_updated', 'title', 'description',
+        fields = ('url', 'date_published', 'last_updated', 'title', 'description',
                   'mode', 'difficulty', 'markers')  # markers too
         read_only_fields = ('publisher', 'date_published', 'last_updated')
         # TODO set read only fields on create()
+
+    def validate_markers(self, value):
+        if len(value) == 0:
+            raise serializers.ValidationError("At least 1 marker must be specified")
+        return value
+
+    def create(self, validated_data):
+        publisher_id = self.initial_data['publisher_id']
+        publisher = User.objects.get(pk=publisher_id)
+
+        route = Route.objects.create(
+            publisher=publisher,
+            title=validated_data['title'],
+            description=validated_data['description'],
+            mode=validated_data['mode'],
+            difficulty=validated_data['difficulty'],
+            markers=validated_data['markers']
+        )
+        return route
 
 
 class UserSerializer(UserDetailsSerializer):

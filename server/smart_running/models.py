@@ -35,7 +35,8 @@ class Route(models.Model):
     # markers list found in Marker model
 
     def __str__(self):
-        return "%s: %s (%d markers)" % (self.title, self.description, len(self.markers))
+        count = self.markers.count()
+        return "%s: %s (%d marker%s)" % (self.title, self.description, count, "" if count == 1 else "s")
 
 
 class Marker(models.Model):
