@@ -74,5 +74,5 @@ class UserSerializer(UserDetailsSerializer):
 class MarkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Marker
-        fields = ('title', 'description', 'full_description', 'latitude',
+        fields = ('id', 'title', 'description', 'full_description', 'latitude',
                   'longitude', 'zone_radius')

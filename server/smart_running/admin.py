@@ -26,7 +26,7 @@ class RouteAdmin(admin.ModelAdmin):
 
 
 class MarkerAdmin(admin.ModelAdmin):
-    readonly_fields = ('routes',)
+    readonly_fields = ('routes', 'id')
 
 
 admin.site.register(User, UserProfileAdmin)
