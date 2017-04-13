@@ -5,12 +5,12 @@ from rest_framework import serializers
 from smart_running.models import Route, Marker
 
 
-class RouteSerializer(serializers.HyperlinkedModelSerializer):
+class RouteSerializer(serializers.ModelSerializer):
     publisher = 'smart_running.serializers.UserSerializer'
 
     class Meta:
         model = Route
-        fields = ('url', 'date_published', 'last_updated', 'title', 'description',
+        fields = ('date_published', 'last_updated', 'title', 'description',
                   'mode', 'difficulty', 'markers')  # markers too
         read_only_fields = ('publisher', 'date_published', 'last_updated')
         # TODO set read only fields on create()
@@ -67,8 +67,8 @@ class UserSerializer(UserDetailsSerializer):
         return instance
 
 
-class MarkerSerializer(serializers.HyperlinkedModelSerializer):
+class MarkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Marker
-        fields = ('url', 'title', 'description', 'full_description', 'latitude',
+        fields = ('title', 'description', 'full_description', 'latitude',
                   'longitude', 'zone_radius')
