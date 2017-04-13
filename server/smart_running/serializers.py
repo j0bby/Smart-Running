@@ -29,9 +29,13 @@ class RouteSerializer(serializers.ModelSerializer):
             title=validated_data['title'],
             description=validated_data['description'],
             mode=validated_data['mode'],
-            difficulty=validated_data['difficulty'],
-            markers=validated_data['markers']
+            difficulty=validated_data['difficulty']
+            # markers=validated_data['markers']
         )
+
+        for m in validated_data['markers']:
+            m.routes.add(route)
+
         return route
 
 
