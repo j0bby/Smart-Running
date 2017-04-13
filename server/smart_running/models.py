@@ -1,4 +1,5 @@
 import djchoices
+import uuid
 from django.contrib.auth.models import User
 from django.core import validators
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -19,12 +20,13 @@ class ProfileType(djchoices.DjangoChoices):
 
 
 class Route(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     publisher = models.ForeignKey(User)
 
     date_published = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
-    title = models.CharField(max_length=64, primary_key=True, validators=[validators.MinLengthValidator(3), ])
+    title = models.CharField(max_length=64, unique=True, validators=[validators.MinLengthValidator(3), ])
     description = models.CharField(max_length=200)
 
     mode = models.CharField(max_length=16, choices=ModeType.choices)
@@ -41,7 +43,8 @@ class Route(models.Model):
 
 
 class Marker(models.Model):
-    title = models.CharField(max_length=64)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=64, unique=True)
     description = models.CharField(max_length=200)
     full_description = models.TextField()
 

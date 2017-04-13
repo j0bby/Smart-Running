@@ -23,6 +23,7 @@ class MarkerInline(admin.TabularInline):
 
 class RouteAdmin(admin.ModelAdmin):
     inlines = [MarkerInline, ]
+    readonly_fields = ('id',)
 
 
 class MarkerAdmin(admin.ModelAdmin):

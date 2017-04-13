@@ -10,7 +10,7 @@ class RouteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Route
-        fields = ('date_published', 'last_updated', 'title', 'description',
+        fields = ('id', 'date_published', 'last_updated', 'title', 'description',
                   'mode', 'difficulty', 'markers')  # markers too
         read_only_fields = ('publisher', 'date_published', 'last_updated')
         # TODO set read only fields on create()
