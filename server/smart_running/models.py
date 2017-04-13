@@ -1,5 +1,6 @@
 import djchoices
 from django.contrib.auth.models import User
+from django.core import validators
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.signals import post_save
@@ -23,7 +24,7 @@ class Route(models.Model):
     date_published = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=64, primary_key=True, validators=[validators.MinLengthValidator(3), ])
     description = models.CharField(max_length=200)
 
     mode = models.CharField(max_length=16, choices=ModeType.choices)
