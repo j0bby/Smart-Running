@@ -1,7 +1,11 @@
-from rest_framework import viewsets, permissions
-from rest_framework.permissions import BasePermission
+from django import forms
+from django.core.exceptions import ValidationError
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import detail_route
+from rest_framework.permissions import BasePermission, IsAuthenticated
+from rest_framework.response import Response
 
-from smart_running.models import Route, Marker
+from smart_running.models import Route, Marker, RouteRating
 from smart_running.serializers import RouteSerializer, MarkerSerializer
 
 
@@ -20,6 +24,10 @@ class AdminWriteAnonRead(BasePermission):
                request.user.is_staff
 
 
+class RouteRatingForm(forms.Form):
+    rating = forms.IntegerField(min_value=1, max_value=5, required=True)
+
+
 class RouteViewSet(viewsets.ModelViewSet):
     queryset = Route.objects.all()
     serializer_class = RouteSerializer
@@ -28,6 +36,37 @@ class RouteViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         request.data['publisher_id'] = request.auth.user.id
         return super(viewsets.ModelViewSet, self).create(request, *args, **kwargs)
+
+    @detail_route(methods=['get', 'post'], permission_classes=[IsAuthenticated])
+    def rate(self, request, pk, *args, **kwargs):
+        if request.method == 'GET':
+            try:
+                rate_obj = RouteRating.objects.get(user=request.user, route=pk)
+                rate = rate_obj.rating
+
+            except RouteRating.DoesNotExist:
+                rate = 0
+            return Response({"rating": rate})
+
+        elif request.method == 'POST':
+            form = RouteRatingForm(request.POST or request.data)
+            if form.is_valid():
+                route = Route.objects.get(pk=pk)
+                rating_value = form.cleaned_data['rating']
+                rating, created = RouteRating.objects.get_or_create(user=request.user, route=route,
+                                                                    defaults={
+                                                                        'route': route,
+                                                                        'user': request.user,
+                                                                        'rating': rating_value
+                                                                    })
+                if not created:
+                    rating.rating = rating_value
+                rating.save()
+
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
+            err = next(iter(form.errors.items()))
+            return Response(err, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MarkerViewSet(viewsets.ModelViewSet):

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core import validators
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.models.aggregates import Avg
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -37,6 +38,11 @@ class Route(models.Model):
 
     # markers list found in Marker model
 
+    @property
+    def rating(self):
+        average = RouteRating.objects.filter(route=self).aggregate(Avg('rating'))["rating__avg"]
+        return 0.0 if average is None else average
+
     def __str__(self):
         count = self.markers.count()
         return "%s: %s (%d marker%s)" % (self.title, self.description, count, "" if count == 1 else "s")
@@ -65,6 +71,25 @@ class UserProfile(models.Model):
     profile_type = models.CharField(max_length=16, choices=ProfileType.choices)
     birth_date = models.DateField(null=True)
     email_verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.user)
+
+
+class RouteRating(models.Model):
+    class Meta:
+        unique_together = ('user', 'route')
+
+    user = models.ForeignKey(User)
+    route = models.ForeignKey(Route)
+    rating = models.IntegerField(validators=[
+        MinValueValidator(1),
+        MaxValueValidator(5)
+    ])
+
+    def __str__(self):
+        return "Rating of %s for route %s by %s" % (
+            self.rating, self.route.id, self.user.get_full_name() or self.user.username)
 
 
 @receiver(post_save, sender=User)

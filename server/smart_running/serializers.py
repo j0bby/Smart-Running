@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 
-from smart_running.models import Route, Marker
+from smart_running.models import Route, Marker, RouteRating
 
 
 class RouteSerializer(serializers.ModelSerializer):
@@ -11,8 +11,8 @@ class RouteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Route
         fields = ('id', 'date_published', 'last_updated', 'title', 'description',
-                  'mode', 'difficulty', 'markers')  # markers too
-        read_only_fields = ('publisher', 'date_published', 'last_updated')
+                  'mode', 'difficulty', 'rating', 'markers')  # markers too
+        read_only_fields = ('publisher', 'date_published', 'last_updated', 'rating')
         # TODO set read only fields on create()
 
     def validate_markers(self, value):
