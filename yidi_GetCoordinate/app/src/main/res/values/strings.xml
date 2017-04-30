@@ -1,8 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">LocationDemo</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-
+    <string name="app_name">MapsApi</string>
+    <string name="google_maps_key"> AIzaSyA2sPgVS4mUDmTZNt50dL0f3iDKGzIvuUs</string>
+    <string name="title_activity_testmap">MapsApi</string>
 </resources>
