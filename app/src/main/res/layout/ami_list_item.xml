@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:focusable="false">
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingEnd="5dp"
+        android:layout_alignParentLeft="true"/>
+
+    <LinearLayout
+        android:id="@+id/infos_ami"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/photo">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/nom"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingEnd="5dp"
+                android:textSize="20dp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:id="@+id/prenom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20dp"
+                android:textColor="#000000" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/mangeAvec"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="15dp"
+            android:textColor="#868484"/>
+
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/checked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:buttonTint="@color/colorPrimary"/>
+
+</RelativeLayout>

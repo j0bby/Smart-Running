@@ -1,11 +1,10 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.example.user.jobby"
+        applicationId "eu.kudan.ar"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
@@ -30,8 +29,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
     testCompile 'junit:junit:4.12'
-   // compile 'com.jakewharton:butterknife-compiler:8.5.1'
+    // compile 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.jakewharton:butterknife:8.5.1'
-   // compile 'com.jakewharton:butterknife-annotations:8.5.1'
+    // compile 'com.jakewharton:butterknife-annotations:8.5.1'
     //compile 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
+    compile 'com.android.support:design:25.2.0'
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
+    compile 'com.google.android.gms:play-services-ads:10.0.1'
 }
