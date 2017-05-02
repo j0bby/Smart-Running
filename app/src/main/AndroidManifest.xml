@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="eu.kudan.ar">
 
@@ -26,16 +27,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".FindBalise" />
+        <activity android:name=".TakePhoto"></activity>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyA2sPgVS4mUDmTZNt50dL0f3iDKGzIvuUs"/>
 
-        <activity
-            android:name=".MainActivity"
-           ></activity>
-
-        <activity
-            android:name=".FindBalise"
-            ></activity>
+        <uses-permission android:name="android.permission.CAMERA" />
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     </application>
-
-
 
 </manifest>

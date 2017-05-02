@@ -37,6 +37,26 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/picactivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_menu_camera" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/RAbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@mipmap/logo1"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView

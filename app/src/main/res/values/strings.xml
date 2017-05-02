@@ -24,4 +24,5 @@
         completions."
     </string>
     <string name="title_activity_acceuil">Acceuil</string>
+    <string name="fileName"></string>
 </resources>
