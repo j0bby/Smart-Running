@@ -30,6 +30,10 @@
         <activity
             android:name=".MainActivity"
            ></activity>
+
+        <activity
+            android:name=".FindBalise"
+            ></activity>
     </application>
 
 
