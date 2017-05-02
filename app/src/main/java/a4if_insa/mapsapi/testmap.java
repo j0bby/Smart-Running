@@ -84,23 +84,6 @@ public class testmap extends FragmentActivity implements OnMapReadyCallback {
         }
     }
 
-    public void refreshMap (GoogleMap myGoogleMap, double latitude, double longitude) {
-        int poiColor= Color.argb(100,253,48,152);
-        int poiStrokeColor = Color.argb(200,253,48,152);
-
-        // Instantiates a new CircleOptions object and defines the center and radius
-        CircleOptions circleOptions = new CircleOptions()
-                .center(new LatLng(latitude, longitude))
-                .radius(50) // In meters
-                .fillColor(poiColor)
-                .strokeColor(poiStrokeColor);
-        // Get back the mutable Circle
-        Circle circle = myGoogleMap.addCircle(circleOptions);
-
-        myGoogleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Me" + meCounter).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))).showInfoWindow();
-        meCounter += 1;
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -111,7 +94,7 @@ public class testmap extends FragmentActivity implements OnMapReadyCallback {
         int startColor = Color.argb(100,68,251,0);
         int startStrokeColor=Color.argb(200,68,251,0);
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in La Doua and move the camera
         LatLng lyon = new LatLng(45.782969, 4.873652);
         mMap.addMarker(new MarkerOptions().position(lyon).title("La Doua")).showInfoWindow();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lyon,15));
@@ -147,6 +130,23 @@ public class testmap extends FragmentActivity implements OnMapReadyCallback {
         circle2.setFillColor(startColor);
     }
 
+    public void refreshMap (GoogleMap myGoogleMap, double latitude, double longitude) {
+        int poiColor= Color.argb(100,253,48,152);
+        int poiStrokeColor = Color.argb(200,253,48,152);
+
+        // Instantiates a new CircleOptions object and defines the center and radius
+        CircleOptions circleOptions = new CircleOptions()
+                .center(new LatLng(latitude, longitude))
+                .radius(50) // In meters
+                .fillColor(poiColor)
+                .strokeColor(poiStrokeColor);
+        // Get back the mutable Circle
+        Circle circle = myGoogleMap.addCircle(circleOptions);
+
+        myGoogleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Me" + meCounter).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))).showInfoWindow();
+        meCounter += 1;
+    }
+
     LocationListener locationListener = new LocationListener() {
 
         @Override
@@ -167,10 +167,6 @@ public class testmap extends FragmentActivity implements OnMapReadyCallback {
         @Override
         public void onLocationChanged(Location location) {
             // code run when device's postion changed
-//            String changeInfo = "refresh every 10 seconds\n" + sdf.format(new Date())
-//                    + ",\n longitude : " + location.getLongitude() + ",\n latitude : "
-//                    + location.getLatitude();
-//            showLocation(location, changeInfo);
             double lat = location.getLatitude();
             double lon = location.getLongitude();
             String info = "refresh every moving 10 seconds \n" + sdf.format(new Date())
@@ -182,4 +178,25 @@ public class testmap extends FragmentActivity implements OnMapReadyCallback {
     };
 
 
+
+    public static boolean validateCheckPoints (LatLng latlng, Circle c) {
+        double r = c.getRadius();
+        double distance = getDistance(latlng, c.getCenter());
+        return (r > distance);
+    }
+
+    public static double getDistance(LatLng first, LatLng second) {
+        double lat1 = (Math.PI / 180) * first.latitude;
+        double lat2 = (Math.PI / 180) * second.latitude;
+        double lon1 = (Math.PI / 180) * first.longitude;
+        double lon2 = (Math.PI / 180) * second.longitude;
+
+        //radious of the Earth
+        final double R = 6371.004;
+        //calculate linear distance between two points
+        double distance = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)) * R;
+
+        //returned value is in meters
+        return distance * 1000;
+    }
 }
