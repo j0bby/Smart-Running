@@ -31,7 +31,7 @@ public class SigninSignup extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Signup.class);
                 startActivity(intent);
                 finish();
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
         buttonlogin.setOnClickListener(new View.OnClickListener() {
@@ -42,7 +42,7 @@ public class SigninSignup extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
     }

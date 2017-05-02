@@ -1,50 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:tools="http://schemas.android.com/tools"
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:id="@+id/MenuPrevu">
-        <item android:title="Acces Profil "
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:checkable="false"
-            android:checked="true"/>
-            <item
-                android:layout_height="match_parent"
-                android:layout_width="wrap_content"
-                android:title="Liste des courses"
-                android:checkable="false"
-                android:checked="true"
-                />
+    <group android:checkableBehavior="single">
         <item
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:title="Liste des amis"
-            android:checkable="false"
-            android:checked="true"
-            />
-
-        <item android:title="Historique "
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:checkable="false"
-            android:checked="true"/>
-                <item
-                    android:layout_height="match_parent"
-                    android:layout_width="wrap_content"
-                    android:title="Satistiques"
-                    android:checkable="false"
-                    android:checked="true"
-                />
+            android:id="@+id/courses"
+            android:icon="@drawable/route"
+            android:title="@string/nav_courses" />
 
         <item
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:title="deconnexion"
-            android:checkable="false"
-            android:checked="true"
-            />
+            android:id="@+id/nav_profil"
+            android:icon="@drawable/user"
+            android:title="@string/nav_profil" />
+
+        <item
+            android:id="@+id/nav_amis"
+            android:icon="@drawable/users"
+            android:title="@string/nav_amis" />
+
+        <item
+            android:id="@+id/nav_historique"
+            android:icon="@drawable/history"
+            android:title="@string/nav_historique" />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/settings"
+            android:title="@string/nav_parametres" />
     </group>
 
+    <item android:title="">
 
+        <item
+            android:id="@+id/nav_deconnexion"
+            android:icon="@drawable/logout"
+            android:title="@string/deconnexion" />
+
+    </item>
 
 </menu>

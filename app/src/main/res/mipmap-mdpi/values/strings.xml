@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">" Smart Running"</string>
+    <string name="app_name">" Jobby"</string>
     <string name="title_activity_signup">Signup</string>
     <string name="title_activity_accueil">Accueil</string>
 
@@ -24,26 +24,4 @@
         completions."
     </string>
     <string name="title_activity_acceuil">Acceuil</string>
-
-        <string name="openDrawer">open_drawer</string>
-        <string name="closeDrawer">close_drawer</string>
-
-        <!-- Navigation Drawer menu labels -->
-        <string name="nav_courses">Courses</string>
-        <string name="nav_profil">Profil</string>
-        <string name="nav_amis">Amis</string>
-        <string name="nav_historique">Historique</string>
-        <string name="nav_parametres">Parametres</string>
-
-        <!-- Toolbar titles when navigation menu item is selected -->
-        <string-array name="nav_item_activity_titles">
-            <item>Courses</item>
-            <item>Profil</item>
-            <item>Amis</item>
-            <item>Historique</item>
-            <item>Parametres</item>
-        </string-array>
-        <string name="deconnexion">Deconnexion</string>
-
-
 </resources>
