@@ -1,2 +1,0 @@
-# Smart-Running
-PLD-smart
