@@ -63,6 +63,8 @@ public class FindBalise extends ARActivity {
                 // result of the request.
             }
         }
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_balise);
         ARAPIKey key = ARAPIKey.getInstance();
