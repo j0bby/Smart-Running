@@ -2,6 +2,7 @@ package com.example.user.jobby;
 
 import android.os.AsyncTask;
 
+import com.example.user.jobby.API.RoutesAPI;
 import com.example.user.jobby.API.SignInAPI;
 import com.example.user.jobby.model.Marker;
 import com.example.user.jobby.model.Route;
@@ -93,41 +94,28 @@ public class RestAPI {
      * make a get request to the server
      * @return the list of all routes available
      */
-    public ArrayList<Route> getRoutesList(){
+    public ArrayList<Route> getRoutesList() {
 
         ArrayList<Route> list = new ArrayList<Route>();
 
+        RoutesAPI routesApi = new RoutesAPI();
+        routesApi.execute("");
         try {
-            URL url = new URL("https://smart.domwillia.ms/markers/");
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-
-            //add request header
-
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("token", token);
-
-            if (connection.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + connection.getResponseCode());
+            String output = routesApi.get();
+            if(output.equals("error") || output.equals("auth error")){
+                return list;
             }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (connection.getInputStream())));
-
-            String output;
-            output = br.readLine();
             JSONArray response = new JSONArray(output);
 
-            for ( int i =0 ; i <response.length(); i++) {
-                JSONObject item= response.getJSONObject(i);
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject item = response.getJSONObject(i);
 
                 JSONArray listMarkers = item.getJSONArray("markers");
 
                 ArrayList<Marker> markers = new ArrayList<Marker>();
 
-                for(int m = 0; m<listMarkers.length(); m++){
-                    Marker newMarker = new Marker(listMarkers.getJSONObject(m).toString());
+                for (int m = 0; m < listMarkers.length(); m++) {
+                    Marker newMarker = new Marker(listMarkers.getString(m));
                     markers.add(newMarker);
                 }
 
@@ -135,11 +123,11 @@ public class RestAPI {
                 Date published = dateFormat.parse(item.getString("date_published"));
                 Date lastUpdated = dateFormat.parse(item.getString("last_updated"));
                 Route.Mode routeMode;
-                switch (item.getString("mode")){
-                    case "TOURISTIC" :
+                switch (item.getString("mode")) {
+                    case "TOURISTIC":
                         routeMode = Route.Mode.TOURISTIC;
                         break;
-                    case "SPORTY" :
+                    case "SPORTY":
                         routeMode = Route.Mode.SPORTY;
                         break;
                     default:
@@ -148,24 +136,19 @@ public class RestAPI {
 
                 }
 
-                Route route = new Route(item.getString("id"), item.getString("title"), item.getString("description"), item.getInt("difficulty"),item.getDouble("rating"), routeMode, published, lastUpdated, markers);
+                Route route = new Route(item.getString("id"), item.getString("title"), item.getString("description"), item.getInt("difficulty"), item.getDouble("rating"), routeMode, published, lastUpdated, markers);
 
                 list.add(route);
             }
-            connection.disconnect();
-        } catch (ProtocolException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } catch (JSONException e) {
+        } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
-
         return list;
     }
 

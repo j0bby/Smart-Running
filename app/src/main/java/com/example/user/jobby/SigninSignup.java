@@ -16,7 +16,10 @@ import android.widget.ImageView;
 import android.graphics.Bitmap;
 import android.widget.Toast;
 
+import com.example.user.jobby.model.Route;
+
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class SigninSignup extends AppCompatActivity {
 
@@ -65,7 +68,8 @@ public class SigninSignup extends AppCompatActivity {
                             .show();
                 }else{
                     Toast.makeText(SigninSignup.this, token, Toast.LENGTH_LONG)
-                            .show();                }
+                            .show();
+                }
 
             }
         });
