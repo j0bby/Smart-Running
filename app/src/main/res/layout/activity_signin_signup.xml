@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="Email"
+                android:hint="Username"
                 android:textColorLink="@android:color/holo_blue_light"
                 android:textColorHint="@android:color/black"
                 android:textColor="@android:color/black" />

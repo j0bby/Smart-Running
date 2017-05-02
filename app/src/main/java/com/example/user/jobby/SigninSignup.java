@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
+import android.widget.Toast;
 
 import java.io.InputStream;
 
@@ -33,8 +34,8 @@ public class SigninSignup extends AppCompatActivity {
 
 //        TextView t = (TextView) findViewById(R.id.link_signup);
         TextView signuparea = (TextView) findViewById(R.id.link_signup);
-        EditText textemail = (EditText) findViewById(R.id.input_email);
-        EditText textpassword = (EditText) findViewById(R.id.input_password);
+        final EditText textemail = (EditText) findViewById(R.id.input_email);
+        final EditText textpassword = (EditText) findViewById(R.id.input_password);
         Button buttonlogin = (Button) findViewById(R.id.button);
 
 //        t.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +47,26 @@ public class SigninSignup extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+            }
+        });
+
+        buttonlogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start the Signup activity
+                RestAPI singleton = RestAPI.getINSTANCE();
+
+                String token = singleton.connect(textemail.getText().toString(),textpassword.getText().toString(),"");
+                if(token.equals("error")){
+                    Toast.makeText(SigninSignup.this, "impossible to connect", Toast.LENGTH_LONG)
+                            .show();
+                }else if(token.equals("bad auth")) {
+                    Toast.makeText(SigninSignup.this, "bad auth", Toast.LENGTH_LONG)
+                            .show();
+                }else{
+                    Toast.makeText(SigninSignup.this, token, Toast.LENGTH_LONG)
+                            .show();                }
+
             }
         });
     }
