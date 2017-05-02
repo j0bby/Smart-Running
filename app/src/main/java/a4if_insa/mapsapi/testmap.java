@@ -57,7 +57,7 @@ public class testmap extends FragmentActivity implements OnMapReadyCallback {
             provider = LocationManager.NETWORK_PROVIDER;
         } else {
             // when there is no available location provider
-            Toast.makeText(testmap.this, "there is no available location provider", Toast.LENGTH_LONG)
+            Toast.makeText(testmap.this, "please check if you have available location provider", Toast.LENGTH_LONG)
                     .show();
             return;
         }
@@ -68,7 +68,7 @@ public class testmap extends FragmentActivity implements OnMapReadyCallback {
             String firstInfo = "first response of your request";
             Toast.makeText(this, firstInfo, Toast.LENGTH_LONG).show();
         } else {
-            String info = "Sorry, cannot obtain the actual position";
+            String info = "Patiently waiting for 10sec and we will get you on the map.s";
             Toast.makeText(this, info, Toast.LENGTH_LONG).show();
         }
 
@@ -97,7 +97,8 @@ public class testmap extends FragmentActivity implements OnMapReadyCallback {
         // Get back the mutable Circle
         Circle circle = myGoogleMap.addCircle(circleOptions);
 
-        myGoogleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Me").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))).showInfoWindow();
+        myGoogleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Me" + meCounter).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))).showInfoWindow();
+        meCounter += 1;
     }
 
     @Override
