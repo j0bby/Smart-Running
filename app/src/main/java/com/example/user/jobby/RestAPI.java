@@ -2,6 +2,7 @@ package com.example.user.jobby;
 
 import android.os.AsyncTask;
 
+import com.example.user.jobby.API.MarkersAPI;
 import com.example.user.jobby.API.RoutesAPI;
 import com.example.user.jobby.API.SignInAPI;
 import com.example.user.jobby.model.Marker;
@@ -99,7 +100,7 @@ public class RestAPI {
         ArrayList<Route> list = new ArrayList<Route>();
 
         RoutesAPI routesApi = new RoutesAPI();
-        routesApi.execute("");
+        routesApi.execute(token);
         try {
             String output = routesApi.get();
             if(output.equals("error") || output.equals("auth error")){
@@ -116,7 +117,9 @@ public class RestAPI {
 
                 for (int m = 0; m < listMarkers.length(); m++) {
                     Marker newMarker = new Marker(listMarkers.getString(m));
+                    newMarker = getMarker(newMarker);
                     markers.add(newMarker);
+
                 }
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -152,17 +155,30 @@ public class RestAPI {
         return list;
     }
 
-    public static void main(String[] Args){
-        RestAPI singleton = RestAPI.getINSTANCE();
-        singleton.connect("matthew","whatamess","");
-       /* ArrayList<Route> routes = singleton.getRoutesList();
-        for(Route r : routes){
-            System.out.println("id: "+ r.getId() + "title: " + r.getTitle() + "description: " + r.getDescription() + "difficulty: " + r.getDifficulty() + " rating : " + r.getRating() + "published: " + r.getPublished() + "last: " + r.getLastUpdated() );
-            for(Marker m : r.getMarkers()){
-                System.out.print("marker : " + m.getId());
-            }
-        }*/
-    }
+
+   public Marker getMarker(Marker marker){
+
+
+       MarkersAPI markersApi = new MarkersAPI();
+       markersApi.execute(token, marker.getId());
+       try {
+           String output = markersApi.get();
+           if(output.equals("error") || output.equals("auth error")){
+               return null;
+           }
+           JSONObject item = new JSONObject(output);
+
+           marker.initiate(item.getString("title"), item.getString("description"), item.getString("full_description"), item.getString("latitude"), item.getString("longitude"),item.getString("zone_radius"));
+
+       } catch (InterruptedException e) {
+           e.printStackTrace();
+       } catch (ExecutionException e) {
+           e.printStackTrace();
+       } catch (JSONException e) {
+           e.printStackTrace();
+       }
+       return marker;
+   }
 
 }
 

@@ -48,4 +48,12 @@ public class Marker {
     public Marker(String id) {
         this.id = id;
     }
+
+    public void initiate(String title, String description, String fullDescription, String lat, String lon, String zoneRadius){
+        this.title = title;
+        this.description = description;
+        this.fullDescription = fullDescription;
+        this.location = new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
+        this.zoneRadius = Float.parseFloat(zoneRadius);
+    }
 }

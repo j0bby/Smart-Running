@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.graphics.Bitmap;
 import android.widget.Toast;
 
+import com.example.user.jobby.API.MarkersAPI;
 import com.example.user.jobby.model.Route;
 
 import java.io.InputStream;
@@ -70,6 +71,8 @@ public class SigninSignup extends AppCompatActivity {
                     Toast.makeText(SigninSignup.this, token, Toast.LENGTH_LONG)
                             .show();
                 }
+
+                singleton.getRoutesList();
 
             }
         });
