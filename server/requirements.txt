@@ -5,3 +5,4 @@ django-rest-swagger
 django-rest-auth
 django-allauth
 django-crispy-forms
+pillow

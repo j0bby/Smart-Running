@@ -48,6 +48,10 @@ class Route(models.Model):
         return "%s: %s (%d marker%s)" % (self.title, self.description, count, "" if count == 1 else "s")
 
 
+def get_file_path(instance, filename):
+    return "markers/%s_%s" % (instance.id, filename)
+
+
 class Marker(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=64, unique=True)
@@ -56,6 +60,10 @@ class Marker(models.Model):
 
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
+
+    clue = models.CharField(max_length=256, blank=True)
+    target_image = models.ImageField(upload_to=get_file_path, null=True)
+    target_texture = models.FileField(upload_to=get_file_path, null=True)
 
     zone_radius = models.FloatField()
 

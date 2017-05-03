@@ -21,6 +21,7 @@ def load_secrets(try_again=True):
         from secrets_keys import SECRET_KEY
     except ImportError:
         r = SystemRandom()
+
         def generate_key():
             max_char = ord("~")
             min_char = ord(" ")
@@ -42,6 +43,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 load_secrets()
+
+PROJECT_ROOT = "/var/smart_running"
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'site_media', 'media')
+MEDIA_URL = '/site_media/media/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'site_media', 'static')
+SITE_MEDIA_URL = '/site_media/'
+STATIC_URL = '/site_media/'
+ADMIN_TOOLS_MEDIA_URL = '/site_media/'
+ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, "admin/")
+STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, 'site_media'),)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -156,7 +167,3 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
-
-STATIC_URL = '/static/'

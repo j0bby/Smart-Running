@@ -75,4 +75,4 @@ class MarkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Marker
         fields = ('id', 'title', 'description', 'full_description', 'latitude',
-                  'longitude', 'zone_radius')
+                  'longitude', 'zone_radius', 'clue', 'target_image', 'target_texture')
