@@ -45,10 +45,11 @@ class UserSerializer(UserDetailsSerializer):
     email_verified = serializers.BooleanField(source="userprofile.email_verified")
     total_distance = serializers.FloatField(source="userprofile.total_distance")
     total_duration = serializers.IntegerField(source="userprofile.total_duration")
+    total_completed = serializers.IntegerField(source="userprofile.total_completed")
 
     class Meta(UserDetailsSerializer.Meta):
         fields = UserDetailsSerializer.Meta.fields + \
-                 ('profile_type', 'birth_date', 'email_verified', 'total_distance', 'total_duration')
+                 ('profile_type', 'birth_date', 'email_verified', 'total_distance', 'total_duration', 'total_completed')
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('userprofile', {})
@@ -58,6 +59,7 @@ class UserSerializer(UserDetailsSerializer):
         email_verified = profile_data.get('email_verified')
         total_distance = profile_data.get('total_distance')
         total_duration = profile_data.get('total_duration')
+        total_completed = profile_data.get('total_completed')
 
         instance = super(UserSerializer, self).update(instance, validated_data)
 
@@ -73,6 +75,8 @@ class UserSerializer(UserDetailsSerializer):
                 profile.total_distance = total_distance
             if total_duration:
                 profile.total_duration = total_duration
+            if total_completed:
+                profile.total_duration = total_completed
 
             profile.save()
 

@@ -98,6 +98,10 @@ class UserProfile(models.Model):
         return 0.0 if total is None else total
 
     @property
+    def total_completed(self):
+        return CompletedRoute.objects.filter(user=self.user).count()
+
+    @property
     def total_duration(self):
         total = CompletedRoute.objects.filter(user=self.user).aggregate(Sum('duration'))['duration__sum']
         return 0.0 if total is None else total.total_seconds()
