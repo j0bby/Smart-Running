@@ -99,6 +99,25 @@ public class FindBalise extends ARActivity {
         return trackable;
     }
 
+    public ARModelNode create3DModel(String model)
+    {
+        ARModelImporter modelImporter = new ARModelImporter();
+        modelImporter.loadFromAsset(model);
+        ARModelNode modelNode = (ARModelNode)modelImporter.getNode();
+
+        // Apply model texture file to model texture material and add ambient lighting
+        ARLightMaterial material = new ARLightMaterial();
+        material.setAmbient(0.8f, 0.8f, 0.8f);
+
+        // Apply texture material to models mesh nodes
+        for(ARMeshNode meshNode : modelImporter.getMeshNodes())
+        {
+            meshNode.setMaterial(material);
+        }
+
+        return modelNode;
+    }
+
     public ARModelNode create3DModel(String model,String texture)
     {
         ARModelImporter modelImporter = new ARModelImporter();
@@ -193,7 +212,7 @@ public class FindBalise extends ARActivity {
         else
             trackable = createMarker ("virsolvy.jpg");
         //Modèle 3D==============================
-        final ARModelNode modelNode =create3DModel("ben.jet","bigBenTexture.png");
+        final ARModelNode modelNode =create3DModel("ben.jet", "bigBenTexture.png");
         scale3D(modelNode, (float) 0.4);
 
         //création tracking manager==========
