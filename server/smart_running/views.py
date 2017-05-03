@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from rest_framework import viewsets, permissions, status
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, list_route
 from rest_framework.permissions import BasePermission, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
@@ -98,3 +98,7 @@ class CompletedRouteViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    @list_route(methods=['get'], permission_classes=[IsAuthenticated], url_path='me')
+    def get_self(self, request, *args, **kwargs):
+        return self.retrieve(request, request.user.id, *args, **kwargs)
