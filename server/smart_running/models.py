@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import djchoices
 import uuid
 from django.contrib.auth.models import User
@@ -110,9 +112,17 @@ class UserProfile(models.Model):
     def total_completed(self):
         return CompletedRoute.objects.filter(user=self.user).count()
 
+    def _duration(self):
+        return CompletedRoute.objects.filter(user=self.user).aggregate(Sum('duration'))['duration__sum']
+
     @property
     def total_duration(self):
-        total = CompletedRoute.objects.filter(user=self.user).aggregate(Sum('duration'))['duration__sum']
+        total = self._duration()
+        return timedelta(0) if total is None else total
+
+    @property
+    def total_duration_seconds(self):
+        total = self._duration()
         return 0.0 if total is None else total.total_seconds()
 
     def __str__(self):
