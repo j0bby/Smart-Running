@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from smart_running.models import UserProfile, Route, Marker, RouteRating
+from smart_running.models import UserProfile, Route, Marker, RouteRating, CompletedRoute
 
 admin.site.unregister(User)
 
@@ -34,7 +34,12 @@ class RatingAdmin(admin.ModelAdmin):
     pass
 
 
+class CompletedRouteAdmin(admin.ModelAdmin):
+    readonly_fields = ('when',)
+
+
 admin.site.register(User, UserProfileAdmin)
 admin.site.register(Route, RouteAdmin)
 admin.site.register(Marker, MarkerAdmin)
 admin.site.register(RouteRating, RatingAdmin)
+admin.site.register(CompletedRoute, CompletedRouteAdmin)

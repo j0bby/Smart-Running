@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 
-from smart_running.models import Route, Marker, RouteRating
+from smart_running.models import Route, Marker, CompletedRoute
 
 
 class RouteSerializer(serializers.ModelSerializer):
@@ -43,10 +43,12 @@ class UserSerializer(UserDetailsSerializer):
     profile_type = serializers.CharField(source="userprofile.profile_type")
     birth_date = serializers.CharField(source="userprofile.birth_date")
     email_verified = serializers.BooleanField(source="userprofile.email_verified")
+    total_distance = serializers.FloatField(source="userprofile.total_distance")
+    total_duration = serializers.IntegerField(source="userprofile.total_duration")
 
     class Meta(UserDetailsSerializer.Meta):
         fields = UserDetailsSerializer.Meta.fields + \
-                 ('profile_type', 'birth_date', 'email_verified')
+                 ('profile_type', 'birth_date', 'email_verified', 'total_distance', 'total_duration')
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('userprofile', {})
@@ -54,6 +56,8 @@ class UserSerializer(UserDetailsSerializer):
         profile_type = profile_data.get('profile_type')
         birth_date = profile_data.get('birth_date')
         email_verified = profile_data.get('email_verified')
+        total_distance = profile_data.get('total_distance')
+        total_duration = profile_data.get('total_duration')
 
         instance = super(UserSerializer, self).update(instance, validated_data)
 
@@ -65,6 +69,10 @@ class UserSerializer(UserDetailsSerializer):
                 profile.birth_date = birth_date
             if email_verified:
                 profile.email_verified = email_verified
+            if total_distance:
+                profile.total_distance = total_distance
+            if total_duration:
+                profile.total_duration = total_duration
 
             profile.save()
 
@@ -76,3 +84,9 @@ class MarkerSerializer(serializers.ModelSerializer):
         model = Marker
         fields = ('id', 'title', 'description', 'full_description', 'latitude',
                   'longitude', 'zone_radius', 'clue', 'target_image', 'target_texture')
+
+
+class CompletedRouteSerializer(serializers.ModelSerializer):
+    class Meta:
+        models = CompletedRoute
+        fields = '__all__'

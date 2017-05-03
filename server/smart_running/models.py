@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.core import validators
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models.aggregates import Avg
+from django.db.models.aggregates import Avg, Sum
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -48,6 +48,18 @@ class Route(models.Model):
         return "%s: %s (%d marker%s)" % (self.title, self.description, count, "" if count == 1 else "s")
 
 
+class CompletedRoute(models.Model):
+    user = models.ForeignKey(User)
+    route = models.ForeignKey(Route)
+
+    when = models.DateTimeField(auto_now_add=True)
+    distance = models.FloatField()
+    duration = models.DurationField()
+
+    def __str__(self):
+        return "%s completed by %s on %s" % (self.route, self.user, self.when)
+
+
 def get_file_path(instance, filename):
     return "markers/%s_%s" % (instance.id, filename)
 
@@ -79,6 +91,16 @@ class UserProfile(models.Model):
     profile_type = models.CharField(max_length=16, choices=ProfileType.choices)
     birth_date = models.DateField(null=True)
     email_verified = models.BooleanField(default=False)
+
+    @property
+    def total_distance(self):
+        total = CompletedRoute.objects.filter(user=self.user).aggregate(Sum('distance'))['distance__sum']
+        return 0.0 if total is None else total
+
+    @property
+    def total_duration(self):
+        total = CompletedRoute.objects.filter(user=self.user).aggregate(Sum('duration'))['duration__sum']
+        return 0.0 if total is None else total.total_seconds()
 
     def __str__(self):
         return str(self.user)
