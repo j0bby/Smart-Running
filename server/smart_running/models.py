@@ -20,6 +20,10 @@ class ProfileType(djchoices.DjangoChoices):
     BOTH = djchoices.ChoiceItem()
 
 
+def get_thumbnail(instance, filename):
+    return "routes/%s_%s" % (instance.id, filename)
+
+
 class Route(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     publisher = models.ForeignKey(User)
@@ -35,6 +39,8 @@ class Route(models.Model):
     difficulty = models.IntegerField(validators=[
         MinValueValidator(1), MaxValueValidator(5)
     ])
+
+    thumbnail = models.ImageField(upload_to=get_thumbnail, null=True)
 
     # markers list found in Marker model
 
