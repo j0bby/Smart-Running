@@ -84,3 +84,17 @@ class CompletedRouteViewSet(viewsets.ModelViewSet):
         self_id = request.user.id
         request.data['user'] = str(self_id)
         return viewsets.ModelViewSet.create(self, request, *args, **kwargs)
+
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        try:
+            queryset = self.filter_queryset(self.get_queryset()).filter(user=pk)
+        except ValueError:
+            queryset = self.get_queryset().none()
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
