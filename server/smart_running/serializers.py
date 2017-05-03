@@ -84,4 +84,4 @@ class MarkerSerializer(serializers.ModelSerializer):
 class CompletedRouteSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompletedRoute
-        fields = '__all__'
+        fields = ('user', 'route', 'when', 'distance', 'duration', 'duration_seconds')

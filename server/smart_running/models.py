@@ -62,6 +62,9 @@ class CompletedRoute(models.Model):
     distance = models.FloatField()
     duration = models.DurationField()
 
+    def duration_seconds(self):
+        return int(self.duration.total_seconds())
+
     def __str__(self):
         return "%s completed by %s on %s" % (self.route, self.user, self.when)
 
