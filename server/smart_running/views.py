@@ -2,11 +2,11 @@ from django import forms
 from django.core.exceptions import ValidationError
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import detail_route
-from rest_framework.permissions import BasePermission, IsAuthenticated
+from rest_framework.permissions import BasePermission, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from smart_running.models import Route, Marker, RouteRating
-from smart_running.serializers import RouteSerializer, MarkerSerializer
+from smart_running.models import Route, Marker, RouteRating, CompletedRoute
+from smart_running.serializers import RouteSerializer, MarkerSerializer, CompletedRouteSerializer
 
 
 class AdminWriteAnonRead(BasePermission):
@@ -73,3 +73,14 @@ class MarkerViewSet(viewsets.ModelViewSet):
     queryset = Marker.objects.all()
     serializer_class = MarkerSerializer
     permission_classes = (AdminWriteAnonRead,)
+
+
+class CompletedRouteViewSet(viewsets.ModelViewSet):
+    queryset = CompletedRoute.objects.all()
+    serializer_class = CompletedRouteSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def create(self, request, *args, **kwargs):
+        self_id = request.user.id
+        request.data['user'] = str(self_id)
+        return viewsets.ModelViewSet.create(self, request, *args, **kwargs)

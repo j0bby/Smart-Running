@@ -88,5 +88,5 @@ class MarkerSerializer(serializers.ModelSerializer):
 
 class CompletedRouteSerializer(serializers.ModelSerializer):
     class Meta:
-        models = CompletedRoute
+        model = CompletedRoute
         fields = '__all__'

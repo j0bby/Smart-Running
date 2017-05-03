@@ -9,6 +9,7 @@ from smart_running import views
 router = routers.DefaultRouter()
 router.register(r'routes', views.RouteViewSet)
 router.register(r'markers', views.MarkerViewSet)
+router.register(r'completed_routes', views.CompletedRouteViewSet)
 
 api_docs = get_swagger_view(title='Smart Running API')
 
