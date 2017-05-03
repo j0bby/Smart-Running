@@ -57,9 +57,6 @@ class UserSerializer(UserDetailsSerializer):
         profile_type = profile_data.get('profile_type')
         birth_date = profile_data.get('birth_date')
         email_verified = profile_data.get('email_verified')
-        total_distance = profile_data.get('total_distance')
-        total_duration = profile_data.get('total_duration')
-        total_completed = profile_data.get('total_completed')
 
         instance = super(UserSerializer, self).update(instance, validated_data)
 
@@ -71,12 +68,6 @@ class UserSerializer(UserDetailsSerializer):
                 profile.birth_date = birth_date
             if email_verified:
                 profile.email_verified = email_verified
-            if total_distance:
-                profile.total_distance = total_distance
-            if total_duration:
-                profile.total_duration = total_duration
-            if total_completed:
-                profile.total_duration = total_completed
 
             profile.save()
 
